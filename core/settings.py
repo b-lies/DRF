@@ -13,9 +13,12 @@ import os
 import dotenv
 from pathlib import Path
 
+from dotenv import load_dotenv
+load_dotenv()
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -85,14 +88,16 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'railway', 
+        'ENGINE': os.environ.get('ENGINE'),
+        'NAME': os.environ.get('NAME'), 
         'USER': 'postgres', 
-        'PASSWORD': 'QpxdVn2Pib7zW2PAvDRk',
-        'HOST': 'containers-us-west-90.railway.app', 
-        'PORT': '5650',
+        'PASSWORD': os.environ.get ('PASSWORD'),
+        'HOST': os.environ.get('HOST'), 
+        'PORT': os.environ.get('PORT'),
     }
 }
+
+print(DATABASES)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
