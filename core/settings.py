@@ -45,10 +45,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
     'blog',
     'blog_api',
     'rest_framework',
     'corsheaders',
+    'django_filters',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -87,14 +90,17 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': os.environ.get('ENGINE'),
-        'NAME': os.environ.get('NAME'), 
-        'USER': 'postgres', 
-        'PASSWORD': os.environ.get ('PASSWORD'),
-        'HOST': os.environ.get('HOST'), 
-        'PORT': os.environ.get('PORT'),
-    }
+    # 'default': {
+    #     'ENGINE': os.environ.get('ENGINE'),
+    #     'NAME': os.environ.get('NAME'), 
+    #     'USER': 'postgres', 
+    #     'PASSWORD': os.environ.get ('PASSWORD'),
+    #     'HOST': os.environ.get('HOST'), 
+    #     'PORT': os.environ.get('PORT'),
+    # }
+        'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase',}
 }
 
 
@@ -116,6 +122,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+#New User Model
+AUTH_USER_MODEL = 'users.CustomUser'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -143,8 +151,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    ]
-    
+    ],
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
 }
 
 REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
@@ -153,3 +166,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://192.168.1.13:3000",
     "http://localhost:3000",
 ]
+
+
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_URL = '/media/'
